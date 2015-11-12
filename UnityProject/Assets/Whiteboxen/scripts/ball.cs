@@ -1,0 +1,145 @@
+﻿using UnityEngine;
+using System.Collections;
+
+
+//COLLECT  playing players by is_playing with the player tag
+public class ball : MonoBehaviour {
+	public vars.player_id last_contact;
+	public int hits = 0;
+	public Vector3 ball_carry_offset = new Vector3(0.0f,1.2f,0.0f);
+	public vars.player_id carried_by;
+	public vars.player_id carried_by_last_frame;
+	private playercontroller p1pc;
+	private playercontroller p2pc;
+	private playercontroller p3pc;
+	private playercontroller p4pc;
+	private Rigidbody rd;
+	public Vector3 punsh_velocity_add = new Vector3(500,200,0);
+	public Vector3 decarray_velocity_add = new Vector3(0.0f,50.0f,0.0f);
+	// Use this for initialization
+	void Start () {
+		this.name = "ball";
+		this.transform.position = GameObject.Find("pause_position").transform.position;
+		rd = this.GetComponent<Rigidbody>();
+		hits = 0;
+		carried_by = vars.player_id.none;
+		carried_by_last_frame = vars.player_id.none;
+		p1pc = GameObject.Find(vars.player_id.player_1.ToString()).GetComponent<playercontroller>();
+		p2pc = GameObject.Find(vars.player_id.player_2.ToString()).GetComponent<playercontroller>();
+		p3pc = GameObject.Find(vars.player_id.player_3.ToString()).GetComponent<playercontroller>();
+		p4pc = GameObject.Find(vars.player_id.player_4.ToString()).GetComponent<playercontroller>();
+	}
+
+
+	public void set_to_pause_pos(){
+		this.transform.position = GameObject.Find("pause_position").transform.position;
+		this.gameObject.GetComponent<Rigidbody>().useGravity = false;
+		carried_by = vars.player_id.none;
+		carried_by_last_frame = vars.player_id.none;
+		last_contact = vars.player_id.none;
+	}
+
+	public void carry(vars.player_id pid, vars.player_id carry_pid, Vector3 pos){
+		if((this.transform.position.x - this.GetComponent<SphereCollider>().radius) <= pos.x && (this.transform.position.x + this.GetComponent<SphereCollider>().radius) >= pos.x &&
+		   (this.transform.position.y - this.GetComponent<SphereCollider>().radius) <= pos.y && (this.transform.position.y + this.GetComponent<SphereCollider>().radius) >= pos.y){
+            Debug.Log(carry_pid.ToString());
+            carried_by = carry_pid;
+			rd.useGravity = false;
+			last_contact = carry_pid;
+		}
+	}
+
+	public void decarry(vars.player_id pid, vars.player_id decarry_pid){
+		if(pid == decarry_pid){
+            Debug.Log("decarried by : " + decarry_pid.ToString());
+			carried_by = vars.player_id.none;
+			rd.useGravity = true;
+			rd.AddForce(decarray_velocity_add);
+		}
+	}
+
+	public void decarry_fly(vars.player_id pid, vars.player_id decarry_pid, Vector3 _decarray_velocity_add){
+		if(pid == decarry_pid){
+            Debug.Log("decarried_fly by : " + decarry_pid.ToString());
+            carried_by = vars.player_id.none;
+			rd.useGravity = true;
+			rd.AddForce(_decarray_velocity_add);
+		}
+	}
+
+	public void spawn(){
+		last_contact = vars.player_id.none;
+		carried_by = vars.player_id.none;
+		rd.useGravity = true;
+		this.transform.position = GameObject.Find("ball_spawn_pos").gameObject.transform.position;
+	}
+
+	void OnCollisionEnter(Collision other) {
+		if(other.collider.gameObject.tag.Contains("Player")) {
+			last_contact = other.collider.gameObject.GetComponent<playercontroller>().player_id;
+			other.collider.gameObject.GetComponent<playercontroller>().player_stat.ball_contacts++;
+			hits++;
+		}
+	}
+
+
+	void OnTriggerEnter(Collider other) {
+		if(other.tag == "ball_contact_collider"){
+			last_contact = other.gameObject.transform.parent.gameObject.GetComponent<playercontroller>().player_id;
+			other.gameObject.transform.parent.gameObject.GetComponent<playercontroller>().player_stat.ball_contacts++;
+		}else if(other.tag == "player_1_punsh"){
+			last_contact = other.gameObject.transform.parent.gameObject.transform.parent.gameObject.GetComponent<playercontroller>().player_id;
+			other.gameObject.transform.parent.gameObject.transform.parent.gameObject.GetComponent<playercontroller>().player_stat.ball_contacts++;
+			if(other.gameObject.transform.parent.gameObject.transform.parent.gameObject.GetComponent<playercontroller>().view_dir == vars.view_direction.left){
+				Vector3 pv = other.gameObject.transform.parent.gameObject.transform.parent.gameObject.GetComponent<Rigidbody>().velocity;
+				rd.AddForce(new Vector3(-punsh_velocity_add.x,punsh_velocity_add.y,punsh_velocity_add.z)+pv);
+			}else if(other.gameObject.transform.parent.gameObject.transform.parent.gameObject.GetComponent<playercontroller>().view_dir == vars.view_direction.right){
+				Vector3 pv = other.gameObject.transform.parent.gameObject.transform.parent.gameObject.GetComponent<Rigidbody>().velocity;
+				rd.AddForce(new Vector3(punsh_velocity_add.x,punsh_velocity_add.y,punsh_velocity_add.z)+pv);
+			}
+		}else if(other.tag == "player_2_punsh"){
+			last_contact = other.gameObject.transform.parent.gameObject.transform.parent.gameObject.GetComponent<playercontroller>().player_id;
+			other.gameObject.transform.parent.gameObject.transform.parent.gameObject.GetComponent<playercontroller>().player_stat.ball_contacts++;
+			if(other.gameObject.transform.parent.gameObject.transform.parent.gameObject.GetComponent<playercontroller>().view_dir == vars.view_direction.left){
+				Vector3 pv = other.gameObject.transform.parent.gameObject.transform.parent.gameObject.GetComponent<Rigidbody>().velocity;
+				rd.AddForce(new Vector3(-punsh_velocity_add.x,punsh_velocity_add.y,punsh_velocity_add.z)+pv);
+			}else if(other.gameObject.transform.parent.gameObject.transform.parent.gameObject.GetComponent<playercontroller>().view_dir == vars.view_direction.right){
+				Vector3 pv = other.gameObject.transform.parent.gameObject.transform.parent.gameObject.GetComponent<Rigidbody>().velocity;
+				rd.AddForce(new Vector3(punsh_velocity_add.x,punsh_velocity_add.y,punsh_velocity_add.z)+pv);
+			}
+			}else if(other.tag == "player_3_punsh"){
+				last_contact = other.gameObject.transform.parent.gameObject.transform.parent.gameObject.GetComponent<playercontroller>().player_id;
+				other.gameObject.transform.parent.gameObject.transform.parent.gameObject.GetComponent<playercontroller>().player_stat.ball_contacts++;
+				if(other.gameObject.transform.parent.gameObject.transform.parent.gameObject.GetComponent<playercontroller>().view_dir == vars.view_direction.left){
+					Vector3 pv = other.gameObject.transform.parent.gameObject.transform.parent.gameObject.GetComponent<Rigidbody>().velocity;
+					rd.AddForce(new Vector3(-punsh_velocity_add.x,punsh_velocity_add.y,punsh_velocity_add.z)+pv);
+				}else if(other.gameObject.transform.parent.gameObject.transform.parent.gameObject.GetComponent<playercontroller>().view_dir == vars.view_direction.right){
+					Vector3 pv = other.gameObject.transform.parent.gameObject.transform.parent.gameObject.GetComponent<Rigidbody>().velocity;
+					rd.AddForce(new Vector3(punsh_velocity_add.x,punsh_velocity_add.y,punsh_velocity_add.z)+pv);
+				}
+				}else if(other.tag == "player_4_punsh"){
+					last_contact = other.gameObject.transform.parent.gameObject.transform.parent.gameObject.GetComponent<playercontroller>().player_id;
+					other.gameObject.transform.parent.gameObject.transform.parent.gameObject.GetComponent<playercontroller>().player_stat.ball_contacts++;
+					if(other.gameObject.transform.parent.gameObject.transform.parent.gameObject.GetComponent<playercontroller>().view_dir == vars.view_direction.left){
+						Vector3 pv = other.gameObject.transform.parent.gameObject.transform.parent.gameObject.GetComponent<Rigidbody>().velocity;
+						rd.AddForce(new Vector3(-punsh_velocity_add.x,punsh_velocity_add.y,punsh_velocity_add.z)+pv);
+					}else if(other.gameObject.transform.parent.gameObject.transform.parent.gameObject.GetComponent<playercontroller>().view_dir == vars.view_direction.right){
+						Vector3 pv = other.gameObject.transform.parent.gameObject.transform.parent.gameObject.GetComponent<Rigidbody>().velocity;
+						rd.AddForce(new Vector3(punsh_velocity_add.x,punsh_velocity_add.y,punsh_velocity_add.z)+pv);
+					}
+				}
+	}
+	// Update is called once per frame
+	void FixedUpdate () {
+		if(carried_by != vars.player_id.none){
+			switch (carried_by) {
+			case vars.player_id.player_1:if(p1pc != null){this.transform.position = p1pc.gameObject.transform.position + ball_carry_offset;}break;
+			case vars.player_id.player_2:if(p1pc != null){this.transform.position = p2pc.gameObject.transform.position + ball_carry_offset;}break;
+			case vars.player_id.player_3:if(p1pc != null){this.transform.position = p3pc.gameObject.transform.position + ball_carry_offset;}break;
+			case vars.player_id.player_4:if(p1pc != null){this.transform.position = p4pc.gameObject.transform.position + ball_carry_offset;}break;
+			default:
+			break;
+			}
+		}
+	}
+}
