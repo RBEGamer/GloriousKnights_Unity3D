@@ -250,6 +250,55 @@ public class playercontroller : MonoBehaviour {
 		rumble_active = true;
 	}
 
+    public bool btn_triggered(InputDevice idc, vars.player_controls pcts, bool last_state = false)
+    {
+        if (!last_state)
+        {
+            switch (pcts)
+            {
+                case vars.player_controls.punsh:
+                    return idc.GetControlByName(vars.player_control_punsh_trigger_name);
+
+                case vars.player_controls.jump:
+                    return idc.GetControlByName(vars.player_control_jump_trigger_name);
+
+                case vars.player_controls.menu:
+                    return idc.GetControlByName(vars.player_control_menu_trigger_name);
+
+                case vars.player_controls.carry_up:
+                    return idc.GetControlByName(vars.player_control_carry_up_trigger_name);
+
+                case vars.player_controls.carry_down:
+                    return idc.GetControlByName(vars.player_control_carry_down_trigger_name);
+
+                default:
+                    return false;
+            }
+        }
+        else
+        {
+            switch (pcts)
+            {
+                case vars.player_controls.punsh:
+                    return idc.GetControlByName(vars.player_control_punsh_trigger_name).LastState;
+
+                case vars.player_controls.jump:
+                    return idc.GetControlByName(vars.player_control_jump_trigger_name).LastState;
+
+                case vars.player_controls.menu:
+                    return idc.GetControlByName(vars.player_control_menu_trigger_name).LastState;
+
+                case vars.player_controls.carry_up:
+                    return idc.GetControlByName(vars.player_control_carry_up_trigger_name).LastState;
+
+                case vars.player_controls.carry_down:
+                    return idc.GetControlByName(vars.player_control_carry_down_trigger_name).LastState;
+
+                default:
+                    return false;
+            }
+        }
+    }
 
 	public void set_model_roation_to_front(){
 		player_model_holder.transform.rotation =  Quaternion.Euler(270, 0, 0);
@@ -315,26 +364,26 @@ public class playercontroller : MonoBehaviour {
 			}
 
 			//MOVE GROUND
-			if (inputDevice.LeftStick.Left && isGrounded && !inputDevice.LeftTrigger && !knocked_down)
+			if (inputDevice.LeftStick.Left && isGrounded && !btn_triggered(inputDevice, vars.player_controls.carry_down) && !knocked_down)
             {
 				rd.AddForce(new Vector3(1.0f,0.0f,0.0f)*speed_multiplier_ground);
 			}
-			if (inputDevice.LeftStick.Right && isGrounded && !inputDevice.LeftTrigger && !knocked_down)
+			if (inputDevice.LeftStick.Right && isGrounded && !btn_triggered(inputDevice, vars.player_controls.carry_down) && !knocked_down)
             {
 				rd.AddForce(new Vector3(-1.0f,0.0f,0.0f)*speed_multiplier_ground);
 			}
 			//MOVE AIR
-			if (inputDevice.LeftStick.Left && !isGrounded && !inputDevice.LeftTrigger && !knocked_down)
+			if (inputDevice.LeftStick.Left && !isGrounded && !btn_triggered(inputDevice, vars.player_controls.carry_down) && !knocked_down)
             {
 				rd.AddForce(new Vector3(1.0f,0.0f,0.0f)*speed_multiplier_air);
 			}
-			if (inputDevice.LeftStick.Right && !isGrounded && !inputDevice.LeftTrigger && !knocked_down)
+			if (inputDevice.LeftStick.Right && !isGrounded && !btn_triggered(inputDevice, vars.player_controls.carry_down) && !knocked_down)
             {
 				rd.AddForce(new Vector3(-1.0f,0.0f,0.0f)*speed_multiplier_air);
 			}
 
 			// JUMP X/A
-			if (inputDevice.Action1 && this.transform.position.y <= jump_height_ground_trigger && !inputDevice.LeftTrigger && !knocked_down)
+			if (btn_triggered(inputDevice, vars.player_controls.jump) && this.transform.position.y <= jump_height_ground_trigger && !btn_triggered(inputDevice, vars.player_controls.carry_down) && !knocked_down)
 			{
               //  rd.velocity = new Vector3(0.0f, 0.0f, 0.0f);
 				rd.AddForce(new Vector3(0.0f, 1.0f*jump_height, 0.0f));
@@ -342,18 +391,18 @@ public class playercontroller : MonoBehaviour {
 			}
 
 			//RESET GAME
-			if(inputDevice.MenuWasPressed && (game_manager.gstate == vars.game_state.playing || game_manager.gstate == vars.game_state.win_sequenze) && player_id == vars.player_id.player_1){
+			if(btn_triggered(inputDevice, vars.player_controls.menu) && (game_manager.gstate == vars.game_state.playing || game_manager.gstate == vars.game_state.win_sequenze) && player_id == vars.player_id.player_1){
 				GameObject.Find("game_manager").GetComponent<game_manager>().reset_game();
 			}
 
 			//PUNSH 
-			if(inputDevice.RightTrigger && !punsh_state && game_manager.gstate == vars.game_state.playing && !knocked_down)
+			if(btn_triggered(inputDevice, vars.player_controls.punsh) && !punsh_state && game_manager.gstate == vars.game_state.playing && !knocked_down)
             {
 				do_punsh();
 			}
 
 			//CARRY UP
-			if(inputDevice.Action2 && game_manager.gstate == vars.game_state.playing && !knocked_down)
+			if(btn_triggered(inputDevice, vars.player_controls.carry_up) && game_manager.gstate == vars.game_state.playing && !knocked_down)
             {
 				ball_instance.carry(player_id, player_id, this.transform.position);
 			}
@@ -361,7 +410,7 @@ public class playercontroller : MonoBehaviour {
 			//CARRY DOWN AND FLY
 			if(ball_instance.carried_by == player_id && game_manager.gstate == vars.game_state.playing){
 				//last state = true und now state = true
-					if(inputDevice.LeftTrigger.LastState && inputDevice.LeftTrigger)
+					if(btn_triggered(inputDevice, vars.player_controls.carry_down, true) && btn_triggered(inputDevice, vars.player_controls.carry_down))
                 {
 						//throw_parable_min
 						float ty = (float)(inputDevice.LeftStick.X); //-1 - +1 -> 0 - 1
@@ -372,7 +421,8 @@ public class playercontroller : MonoBehaviour {
 						}
 					setTrajectoryPoints(new Vector3(throwDirectionObject.position.z, throwDirectionObject.position.y, throwDirectionObject.position.x), throw_parable_velocity);
 					//last state = true und now state = false -> werfen
-					}else if(!inputDevice.LeftTrigger && inputDevice.LeftTrigger.LastState){
+					}else if(!btn_triggered(inputDevice, vars.player_controls.carry_down) && btn_triggered(inputDevice, vars.player_controls.carry_down, true))
+                {
 						ball_instance.decarry_fly(player_id, player_id, new Vector3(throw_parable_velocity.z *throw_ball_multiplier.x, throw_parable_velocity.y * throw_ball_multiplier.y, throw_parable_velocity.x * throw_ball_multiplier.z));
 						throw_points_cleared = false;
 						clearTrajectoryPoints();
