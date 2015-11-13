@@ -1,0 +1,39 @@
+Base path: C:/Program Files/Unity/Editor/Data
+Pipe name: \\.\pipe\UnityShaderCompiler-64bit-1-2820
+Cmd: getPlatforms
+Cmd: preprocess
+  insize=2855 outsize=1047 ok=1
+Cmd: compileSnippet
+  api=4 type=0 insize=1298 outsize=1209 kw= pd= ok=1
+Cmd: compileSnippet
+  api=4 type=1 insize=1298 outsize=1339 kw= pd= ok=1
+Cmd: compileSnippet
+  api=4 type=0 insize=1114 outsize=1558 kw= pd= ok=1
+Cmd: compileSnippet
+  api=4 type=1 insize=1114 outsize=518 kw= pd= ok=1
+Cmd: preprocess
+  insize=7285 outsize=841 ok=1
+Cmd: compileSnippet
+  error: 1 plat 4 at (36): Duplicate non-system value semantic definition: output semantic 'TEXCOORD0' and output semantic 'TEXCOORD0'\nCompiling Vertex program
+  error: 1 plat 4 at (37): Duplicate non-system value semantic definition: output semantic 'TEXCOORD0' and output semantic 'TEXCOORD0'\nCompiling Vertex program
+  api=4 type=0 insize=2598 outsize=1071 kw= pd= ok=1
+Cmd: compileSnippet
+  api=4 type=1 insize=2598 outsize=526 kw= pd= ok=1
+Cmd: compileSnippet
+  api=4 type=0 insize=4465 outsize=1404 kw= pd= ok=1
+Cmd: compileSnippet
+  api=4 type=1 insize=4465 outsize=616 kw= pd= ok=1
+Cmd: compileSnippet
+  api=4 type=4 insize=4465 outsize=3614 kw= pd= ok=1
+Cmd: compileSnippet
+  api=4 type=0 insize=990 outsize=1087 kw= pd= ok=1
+Cmd: compileSnippet
+  api=4 type=1 insize=990 outsize=713 kw= pd= ok=1
+Cmd: compileSnippet
+  api=4 type=0 insize=1482 outsize=1290 kw=SOFTPARTICLES_OFF pd= ok=1
+Cmd: compileSnippet
+  api=4 type=1 insize=1482 outsize=827 kw=SOFTPARTICLES_OFF pd= ok=1
+Cmd: compileSnippet
+  api=4 type=0 insize=1482 outsize=2038 kw=SOFTPARTICLES_ON pd= ok=1
+Cmd: compileSnippet
+  api=4 type=1 insize=1482 outsize=1550 kw=SOFTPARTICLES_ON pd= ok=1
