@@ -177,10 +177,7 @@ public class adv_playercontroller : MonoBehaviour {
     }
 
 
-    if(player_id == vars.player_id.player_1)
-        {
-            Debug.Log(inputDevice.LeftStick.X);
-        }
+
 
 
     //MOVE
@@ -247,6 +244,8 @@ public class adv_playercontroller : MonoBehaviour {
       rd.velocity = new Vector3(0.0f, rd.velocity.y, 0.0f);
     }
 
+
+
     //PUNSH
     if (btn_triggered(inputDevice, vars.player_controls.punsh) && !btn_triggered(inputDevice, vars.player_controls.punsh, true) && ball_instance.carried_by != player_id && !is_kocked)
     {
@@ -254,7 +253,8 @@ public class adv_playercontroller : MonoBehaviour {
       rd.velocity = Vector3.zero;
        punsh_disable_timer = punsh_disable_timer_max;
       animator.SetTrigger("punsh");
-    }
+     
+        }
 
 
     if(punsh_disable_timer > 0.0f)
@@ -263,6 +263,7 @@ public class adv_playercontroller : MonoBehaviour {
         }
         else
         {
+            punsh_disable_timer = punsh_disable_timer_max;
             punsh_collider.enabled = false;
         }
 

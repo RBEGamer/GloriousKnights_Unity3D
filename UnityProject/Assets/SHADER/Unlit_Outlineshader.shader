@@ -5,7 +5,7 @@
 	_MainColor ("MainColor", Color) = (1,1,1,1) 
     _Outline ("Outline width", Range (0.002, 0.1)) = 0.01 
     _EmitMap ("Emission Texture", 2D) = "black" {}
-    _EmitColor( "Emit Color", Color ) = ( 0.0, 0.0, 0.0, 0.0 )
+    _EmitColor( "Emit_Color", Color ) = ( 0.0, 0.0, 0.0, 0.0 )
     _EmitConst_1("EmitConst_1", Range(0.0, 3.0))= 1.0
   }
   SubShader {

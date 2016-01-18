@@ -24,12 +24,20 @@ public class ball : MonoBehaviour {
   public GameObject player3_scrpit_obj;
   public GameObject player4_scrpit_obj;
 
+
+    public ParticleSystem particles;
+    public GameObject particle_holder;
+
+    public GameObject ms_skull;
+    public  Material ms_skull_mat;
+
 	private Rigidbody rd;
 	public Vector3 punsh_velocity_add = new Vector3(500,200,0);
 	public Vector3 decarray_velocity_add = new Vector3(0.0f,50.0f,0.0f);
   Quaternion init_rot;
 	// Use this for initialization
 	void Start () {
+      //  ms_skull_mat = ms_skull.GetComponent<Material>();
     animator = skull_ob.GetComponent<Animator>();
 		asource = this.GetComponent<AudioSource>();
 		this.name = "ball";
@@ -39,7 +47,8 @@ public class ball : MonoBehaviour {
 		hits = 0;
 		carried_by = vars.player_id.none;
 		carried_by_last_frame = vars.player_id.none;
-    p1pc = player1_scrpit_obj.GetComponent<adv_playercontroller>();
+        particles = particle_holder.GetComponent<ParticleSystem>();
+        p1pc = player1_scrpit_obj.GetComponent<adv_playercontroller>();
 		p2pc = player2_scrpit_obj.GetComponent<adv_playercontroller>();
 		p3pc = player3_scrpit_obj.GetComponent<adv_playercontroller>();
     p4pc = player4_scrpit_obj.GetComponent<adv_playercontroller>();
@@ -88,7 +97,7 @@ public class ball : MonoBehaviour {
 	public void decarry_fly(vars.player_id pid, float _decarray_velocity_add){
     rd.useGravity = false;
 
-            Debug.Log("decarried_fly by : " + pid.ToString());
+           
             carried_by = vars.player_id.none;
        // last_contact = pid;
       rd.velocity =  new Vector3(-_decarray_velocity_add, 0.0f,0.0f) ;
@@ -131,12 +140,19 @@ public class ball : MonoBehaviour {
       
     }
   
+
+    public void enable_gravity()
+    {
+        rd.useGravity = true;
+
+        play_hit_animation();
+    }
+
 	void OnCollisionEnter(Collision other) {
 		if(other.collider.gameObject.tag.Contains("wall")) {
       rd.useGravity = true;
-         
             play_hit_animation();
-		}
+        }
 
    
 	}
@@ -171,14 +187,51 @@ public class ball : MonoBehaviour {
     }
 
 	}
+
+
+
+
+    public void update_particle_color()
+    {
+        switch (last_contact)
+        {
+            case vars.player_id.none:
+                particles.startColor = Color.black;
+                ms_skull_mat.SetColor("_EmitColor", Color.black);
+                break;
+            case vars.player_id.player_1:
+                particles.startColor = Color.blue;
+                ms_skull_mat.SetColor("_EmitColor", Color.blue);
+                break;
+            case vars.player_id.player_2:
+                particles.startColor = Color.green;
+                ms_skull_mat.SetColor("_EmitColor", Color.green);
+                break;
+            case vars.player_id.player_3:
+                particles.startColor = Color.yellow;
+                ms_skull_mat.SetColor("_EmitColor", Color.yellow);
+                break;
+            case vars.player_id.player_4:
+                particles.startColor = Color.red;
+                ms_skull_mat.SetColor("_EmitColor", Color.red);
+                break;
+            default:
+                break;
+        }
+    
+
+
+    }
+
+
 	// Update is called once per frame
 	void FixedUpdate () {
     if (this.transform.position.y < 0.0f)
     {
       spawn();
     }
-
-    if(game_manager.gstate == vars.game_state.playing)
+        update_particle_color();
+    if (game_manager.gstate == vars.game_state.playing)
         {
             if (decarry_timer > 0.0f)
             {

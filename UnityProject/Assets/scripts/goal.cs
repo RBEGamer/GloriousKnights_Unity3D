@@ -51,6 +51,7 @@ public class goal : MonoBehaviour {
             }else
             {
                 other.collider.gameObject.GetComponent<ball>().last_contact = vars.player_id.none;
+                other.collider.gameObject.GetComponent<ball>().enable_gravity();
              //   other.collider.GetComponent<ball>().decarry();
                 return;
             }
@@ -110,7 +111,7 @@ public class goal : MonoBehaviour {
 
 
 
-
+       
     hut_animator = hut_anim_holder.GetComponent<Animator>();
     pumking_animator = pumkin_anim_holder.GetComponent<Animator>();
 
