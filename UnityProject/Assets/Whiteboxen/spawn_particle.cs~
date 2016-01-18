@@ -1,0 +1,16 @@
+﻿using UnityEngine;
+using System.Collections;
+
+public class spawn_particle : MonoBehaviour {
+	public GameObject particle_holder;
+	public bool simulate;
+	// Use this for initialization
+	void Start () {
+		particle_holder.GetComponent<ParticleSystem>().Simulate(1.0f);
+	}
+	
+	// Update is called once per frame
+	void Update () {
+
+	}
+}
