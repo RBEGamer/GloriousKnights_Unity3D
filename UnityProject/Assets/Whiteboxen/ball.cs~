@@ -1,0 +1,29 @@
+﻿using UnityEngine;
+using System.Collections;
+
+public class ball : MonoBehaviour {
+	public vars.player_id last_contact;
+	public int hits = 0;
+	// Use this for initialization
+	void Start () {
+		hits = 0;
+	}
+
+
+	public void spawn(){
+		last_contact = vars.player_id.none;
+		this.transform.position = GameObject.Find("ball_spawn_pos").gameObject.transform.position;
+	}
+
+	void OnCollisionEnter(Collision other) {
+		if(other.collider.gameObject.tag.Contains("Player")) {
+			last_contact = other.collider.gameObject.GetComponent<playercontroller>().player_id;
+			other.collider.gameObject.GetComponent<playercontroller>().player_stat.ball_contacts++;
+			hits++;
+		}
+	}
+	// Update is called once per frame
+	void Update () {
+	
+	}
+}

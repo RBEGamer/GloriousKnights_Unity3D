@@ -1,0 +1,33 @@
+﻿using UnityEngine;
+using System.Collections;
+
+public class goal : MonoBehaviour {
+	public vars.player_id tid;
+
+
+
+	void OnCollisionEnter(Collision other) {
+		
+		if(other.gameObject.tag.Contains("ball")) {
+			if(other.collider.gameObject.GetComponent<ball>().last_contact == vars.player_id.player_1){game_manager.score_player_1++;}
+			else if(other.collider.gameObject.GetComponent<ball>().last_contact == vars.player_id.player_2){game_manager.score_player_2++;}
+			else if(other.collider.gameObject.GetComponent<ball>().last_contact == vars.player_id.player_3){game_manager.score_player_3++;}
+			else if(other.collider.gameObject.GetComponent<ball>().last_contact == vars.player_id.player_4){game_manager.score_player_4++;}
+			else{other.collider.gameObject.GetComponent<ball>().last_contact = vars.player_id.none;}
+			other.collider.gameObject.GetComponent<ball>().spawn(); //spawn ball
+		}
+	}
+
+
+
+
+	// Use this for initialization
+	void Start () {
+	
+	}
+	
+	// Update is called once per frame
+	void Update () {
+	
+	}
+}

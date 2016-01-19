@@ -1,0 +1,221 @@
+fileFormatVersion: 2
+guid: 9079ca8335811f04bb67d3621d40f517
+timeCreated: 1453214075
+licenseType: Free
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: Bein_rechts
+    100004: Ctrl_Kopf
+    100006: j_kopf
+    100008: ms_witch:head_cage
+    100010: ms_witch:Object003
+    100012: player_idle1:Ctrl_Complete_Body
+    100014: player_idle1:Ctrl_Complete_UpperBody
+    100016: player_idle1:joint_fuss_links_knoechel
+    100018: player_idle1:joint_fuss_links_mitte
+    100020: player_idle1:joint_fuss_links_unten
+    100022: player_idle1:joint_hueftknochen_links
+    100024: player_idle1:joint_knie_links
+    100026: player_idle:Arm_rechts
+    100028: player_idle:cluster_lowerBody
+    100030: player_idle:cluster_upperBody
+    100032: player_idle:Ctrl_Arm_rechts
+    100034: player_idle:Ctrl_Complete_Body
+    100036: player_idle:Ctrl_Complete_UpperBody
+    100038: player_idle:Ctrl_Fuss_rechts
+    100040: "player_idle:Ctrl_fu\xDF_links"
+    100042: "player_idle:Ctrl_fu\xDF_rechts"
+    100044: player_idle:Ctrl_hand
+    100046: player_idle:Ctrl_LowerBody
+    100048: player_idle:Ctrl_Schulter_links
+    100050: player_idle:Ctrl_Schulter_rechts1
+    100052: player_idle:Ctrl_UpperBody
+    100054: player_idle:curve_ruecken
+    100056: player_idle:Daumen_unten
+    100058: player_idle:Daumen_unten_rechts_bewegen
+    100060: player_idle:Daumen_unten_rechts_bewegen 1
+    100062: player_idle:Finger_Bewegen
+    100064: player_idle:Finger_bewegen
+    100066: player_idle:fuss_mittig_drehen
+    100068: player_idle:fuss_strecken
+    100070: player_idle:group1
+    100072: player_idle:group3
+    100074: player_idle:group4
+    100076: player_idle:Handgelenk_links
+    100078: player_idle:Handschuh_komplett
+    100080: player_idle:heel_heben
+    100082: player_idle:ikH_mitte
+    100084: player_idle:ikH_Oben
+    100086: player_idle:ikH_unten
+    100088: player_idle:ikRuecken
+    100090: player_idle:joint_fuss_links_knoechel
+    100092: player_idle:joint_fuss_links_mitte
+    100094: player_idle:joint_fuss_links_unten
+    100096: player_idle:joint_Hand_links
+    100098: player_idle:joint_Hand_links_unten
+    100100: player_idle:joint_Hand_rechts
+    100102: player_idle:joint_Hand_rechts_unten
+    100104: player_idle:joint_hueftknochen_links
+    100106: player_idle:joint_knie_links
+    100108: player_idle:joint_koerper_bauch
+    100110: player_idle:joint_koerper_brust
+    100112: player_idle:joint_koerper_hals
+    100114: player_idle:joint_koerper_huefte
+    100116: player_idle:joint_koerpermitte
+    100118: player_idle:joint_schulter_rechts
+    100120: player_idle:kompletten_Daumen
+    100122: player_idle:Kompletten_daumen_benutzen
+    100124: player_idle:Kompletter_Handschuh
+    100126: player_idle:left
+    100128: player_idle:pasted__fuss_mittig_drehen
+    100130: player_idle:pasted__fuss_strecken
+    100132: player_idle:pasted__heel_heben
+    100134: player_idle:pasted__spitze_bleibt_am_boden
+    100136: player_idle:pasted__spitze_heben
+    100138: player_idle:Rig_GRP
+    100140: player_idle:spitze_bleibt_am_boden
+    100142: player_idle:spitze_heben
+    400000: //RootNode
+    400002: Bein_rechts
+    400004: Ctrl_Kopf
+    400006: j_kopf
+    400008: ms_witch:head_cage
+    400010: ms_witch:Object003
+    400012: player_idle1:Ctrl_Complete_Body
+    400014: player_idle1:Ctrl_Complete_UpperBody
+    400016: player_idle1:joint_fuss_links_knoechel
+    400018: player_idle1:joint_fuss_links_mitte
+    400020: player_idle1:joint_fuss_links_unten
+    400022: player_idle1:joint_hueftknochen_links
+    400024: player_idle1:joint_knie_links
+    400026: player_idle:Arm_rechts
+    400028: player_idle:cluster_lowerBody
+    400030: player_idle:cluster_upperBody
+    400032: player_idle:Ctrl_Arm_rechts
+    400034: player_idle:Ctrl_Complete_Body
+    400036: player_idle:Ctrl_Complete_UpperBody
+    400038: player_idle:Ctrl_Fuss_rechts
+    400040: "player_idle:Ctrl_fu\xDF_links"
+    400042: "player_idle:Ctrl_fu\xDF_rechts"
+    400044: player_idle:Ctrl_hand
+    400046: player_idle:Ctrl_LowerBody
+    400048: player_idle:Ctrl_Schulter_links
+    400050: player_idle:Ctrl_Schulter_rechts1
+    400052: player_idle:Ctrl_UpperBody
+    400054: player_idle:curve_ruecken
+    400056: player_idle:Daumen_unten
+    400058: player_idle:Daumen_unten_rechts_bewegen
+    400060: player_idle:Daumen_unten_rechts_bewegen 1
+    400062: player_idle:Finger_Bewegen
+    400064: player_idle:Finger_bewegen
+    400066: player_idle:fuss_mittig_drehen
+    400068: player_idle:fuss_strecken
+    400070: player_idle:group1
+    400072: player_idle:group3
+    400074: player_idle:group4
+    400076: player_idle:Handgelenk_links
+    400078: player_idle:Handschuh_komplett
+    400080: player_idle:heel_heben
+    400082: player_idle:ikH_mitte
+    400084: player_idle:ikH_Oben
+    400086: player_idle:ikH_unten
+    400088: player_idle:ikRuecken
+    400090: player_idle:joint_fuss_links_knoechel
+    400092: player_idle:joint_fuss_links_mitte
+    400094: player_idle:joint_fuss_links_unten
+    400096: player_idle:joint_Hand_links
+    400098: player_idle:joint_Hand_links_unten
+    400100: player_idle:joint_Hand_rechts
+    400102: player_idle:joint_Hand_rechts_unten
+    400104: player_idle:joint_hueftknochen_links
+    400106: player_idle:joint_knie_links
+    400108: player_idle:joint_koerper_bauch
+    400110: player_idle:joint_koerper_brust
+    400112: player_idle:joint_koerper_hals
+    400114: player_idle:joint_koerper_huefte
+    400116: player_idle:joint_koerpermitte
+    400118: player_idle:joint_schulter_rechts
+    400120: player_idle:kompletten_Daumen
+    400122: player_idle:Kompletten_daumen_benutzen
+    400124: player_idle:Kompletter_Handschuh
+    400126: player_idle:left
+    400128: player_idle:pasted__fuss_mittig_drehen
+    400130: player_idle:pasted__fuss_strecken
+    400132: player_idle:pasted__heel_heben
+    400134: player_idle:pasted__spitze_bleibt_am_boden
+    400136: player_idle:pasted__spitze_heben
+    400138: player_idle:Rig_GRP
+    400140: player_idle:spitze_bleibt_am_boden
+    400142: player_idle:spitze_heben
+    4300000: ms_witch:head_cage
+    4300002: ms_witch:Object003
+    7400000: Take 001
+    9500000: //RootNode
+    13700000: ms_witch:head_cage
+    13700002: ms_witch:Object003
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleRotations: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
