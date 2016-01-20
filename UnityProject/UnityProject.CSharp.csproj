@@ -57,23 +57,14 @@
     <Reference Include="UnityEngine.Networking">
       <HintPath>Library\UnityAssemblies\UnityEngine.Networking.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.Networking">
-      <HintPath>Library\UnityAssemblies\UnityEngine.Networking.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.UI">
-      <HintPath>Library\UnityAssemblies\UnityEngine.UI.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEditor">
       <HintPath>Library\UnityAssemblies\UnityEditor.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\BALL\wall_collider.cs" />
-    <Compile Include="Assets\CreditMenuButtonManager.cs" />
     <Compile Include="Assets\Fx Explosion Pack\Script\DestroyEffect.cs" />
     <Compile Include="Assets\Fx Explosion Pack\Script\csLightControl.cs" />
-    <Compile Include="Assets\GameSettingsMenuButtonManager.cs" />
-    <Compile Include="Assets\GameStartingMenuButtonManager.cs" />
     <Compile Include="Assets\InControl\Examples\Basic\CubeController.cs" />
     <Compile Include="Assets\InControl\Examples\CustomProfile\CubeController.cs" />
     <Compile Include="Assets\InControl\Examples\CustomProfile\KeyboardAndMouseProfile.cs" />
@@ -184,14 +175,18 @@
     <Compile Include="Assets\InControl\Source\XInput\XInputDotNetPure\GamePad.cs" />
     <Compile Include="Assets\InControl\Source\XInput\XInputDotNetPure\Utils.cs" />
     <Compile Include="Assets\InControl\Test\TestInputManager.cs" />
-    <Compile Include="Assets\OptionMenuButton.cs" />
-    <Compile Include="Assets\PauseMenuButtonManager.cs" />
-    <Compile Include="Assets\adv_playercontroller.cs" />
+    <Compile Include="Assets\scripts\CreditMenuButtonManager.cs" />
+    <Compile Include="Assets\scripts\GameSettingsMenuButtonManager.cs" />
+    <Compile Include="Assets\scripts\GameStartingMenuButtonManager.cs" />
+    <Compile Include="Assets\scripts\OptionMenuButton.cs" />
+    <Compile Include="Assets\scripts\PauseMenuButtonManager.cs" />
+    <Compile Include="Assets\scripts\adv_playercontroller.cs" />
     <Compile Include="Assets\scripts\ball.cs" />
     <Compile Include="Assets\scripts\ball_shadow.cs" />
     <Compile Include="Assets\scripts\ball_shadow_follower.cs" />
     <Compile Include="Assets\scripts\camera.cs" />
     <Compile Include="Assets\scripts\console_button.cs" />
+    <Compile Include="Assets\scripts\firework_animator.cs" />
     <Compile Include="Assets\scripts\game_manager.cs" />
     <Compile Include="Assets\scripts\goal.cs" />
     <Compile Include="Assets\scripts\goal_positioner.cs" />
@@ -201,8 +196,8 @@
     <Compile Include="Assets\scripts\playercontroller.cs" />
     <Compile Include="Assets\scripts\ui_manager.cs" />
     <Compile Include="Assets\scripts\vars.cs" />
+    <Compile Include="Assets\scripts\wicht_animation_script.cs" />
     <Compile Include="Assets\scripts\win_sequenze_ui.cs" />
-    <Compile Include="Assets\wicht_animation_script.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\InControl\README\README.txt" />

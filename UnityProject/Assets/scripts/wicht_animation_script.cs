@@ -13,6 +13,12 @@ public class wicht_animation_script : MonoBehaviour {
     Random rnd;
 
 
+    public void throw_in()
+    {
+        animator.SetTrigger("throw_in");
+    }
+
+
 	// Use this for initialization
 	void Start () {
         animator = this.gameObject.GetComponent<Animator>();

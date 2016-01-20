@@ -24,7 +24,7 @@ public class ball : MonoBehaviour {
   public GameObject player3_scrpit_obj;
   public GameObject player4_scrpit_obj;
 
-
+    public GameObject einwurfball_obj;
     public ParticleSystem particles;
     public GameObject particle_holder;
 
@@ -36,14 +36,17 @@ public class ball : MonoBehaviour {
 	public Vector3 decarray_velocity_add = new Vector3(0.0f,50.0f,0.0f);
   Quaternion init_rot;
 
+    public float decarry_timer_max = 0.2f;
+    public float decarry_timer = 0.2f;
 
+    public GameObject wicht_gameobject;
 
+    public bool spawned;
 
-
-
-	// Use this for initialization
-	void Start () {
-      //  ms_skull_mat = ms_skull.GetComponent<Material>();
+    // Use this for initialization
+    void Start () {
+     //   spawned = false;
+    //  ms_skull_mat = ms_skull.GetComponent<Material>();
     animator = skull_ob.GetComponent<Animator>();
 		asource = this.GetComponent<AudioSource>();
 		this.name = "ball";
@@ -81,8 +84,7 @@ public class ball : MonoBehaviour {
 		
 	}
 
-    public float decarry_timer_max = 0.2f;
-    public float decarry_timer = 0.2f;
+
 
 
 	public void decarry(){
@@ -102,25 +104,32 @@ public class ball : MonoBehaviour {
 
     public void decarry_collide(Vector3 vel)
     {
-        play_hit_animation();
-   
-        rd.useGravity = true;
-
-        this.GetComponent<SphereCollider>().enabled = false;
-
-
         carried_by = vars.player_id.none;
         last_contact = vars.player_id.none;
+
+        wall_collide_colluder_disable_timer = wall_collide_collider_disable_timer_max;
+        wall_collide_collider_disabled = true;
+
+
+        add_force(vel);
+
+        play_hit_animation();
+   
+       
+
+        //this.GetComponent<SphereCollider>().enabled = false;
+
+
+
                     
-        rd.useGravity = true;
-        rd.AddForce(vel);
+
      
 
     }
 
     public void decarry_fly(vars.player_id pid, float _decarray_velocity_add){
     rd.useGravity = false;
-
+        Debug.Log("decarry fly");
            
             carried_by = vars.player_id.none;
        // last_contact = pid;
@@ -138,11 +147,35 @@ public class ball : MonoBehaviour {
 		}
 		return true;
 	}
-	public void spawn(){
- 
-		last_contact = vars.player_id.none;
-		carried_by = vars.player_id.none;
-		rd.useGravity = true;
+
+
+
+
+    private float spawn_delay_time = 2.0f;
+    public float spawn_delay_time_max = 2.0f;
+
+
+    public void spawn()
+    {
+        Debug.Log("spawn");
+        set_to_pause_pos();
+        spawned = false;
+        spawn_delay_time = spawn_delay_time_max;
+        wicht_gameobject.GetComponent<wicht_animation_script>().throw_in();
+        einwurfball_obj.GetComponent<Animator>().SetTrigger("einwurf");
+        // spawn_real();
+    }
+
+	public void spawn_real(){
+
+      
+
+
+        Debug.Log("spawn-real");
+       
+        last_contact = vars.player_id.none;
+        carried_by = vars.player_id.none;
+        rd.useGravity = true;
         this.rd.velocity = Vector3.zero;
 
         float rndnum = (int)Random.Range(1.0F, 101.0F);
@@ -168,14 +201,27 @@ public class ball : MonoBehaviour {
     public void enable_gravity()
     {
         rd.useGravity = true;
-        rd.velocity = new Vector3(0.0f, rd.velocity.y, 0.0f);
+      //  rd.velocity = new Vector3(0.0f, rd.velocity.y, 0.0f);
         play_hit_animation();
     }
 
 
+
+    public float wall_collide_collider_disable_timer_max = 1.0f;
+    private float wall_collide_colluder_disable_timer = 1.0f;
+    private bool wall_collide_collider_disabled = false;
+
     public void add_force(Vector3 vel)
     {
-        rd.AddForce(vel);
+        Debug.Log("add force :" + vel);
+        carried_by = vars.player_id.none;
+        last_contact = vars.player_id.none;
+        rd.velocity = vel;
+        rd.useGravity = true;
+
+        //rd.AddForce(vel);
+
+        Debug.Log(rd.velocity);
     }
 
 
@@ -202,10 +248,11 @@ public class ball : MonoBehaviour {
    // shader_holder.GetComponent<Material>().SetFloat("EmitConst_1", 0.0f);
   
   }
+
 	void OnTriggerEnter(Collider other) {
     Debug.Log("ball trigger enter by" + other.transform.parent.gameObject.tag);
 
-    if (other.transform.parent.gameObject.tag == "Player")
+    if (other.transform.parent.gameObject.tag == "Player" && !wall_collide_collider_disabled)
     {
             //NUR WENN NICHT GECARRIED WIRD DANN WECHSELN
             if (!is_carrying())
@@ -269,8 +316,8 @@ public class ball : MonoBehaviour {
 	void FixedUpdate () {
     if (this.transform.position.y < 0.0f)
     {
-      spawn();
-    }
+     spawn_real();
+        }
         update_particle_color();
     if (game_manager.gstate == vars.game_state.playing)
         {
@@ -282,6 +329,35 @@ public class ball : MonoBehaviour {
             {
                 this.GetComponent<SphereCollider>().enabled = true;
             }
+
+
+
+            if(!spawned && spawn_delay_time > 0.0f)
+            {
+                spawn_delay_time -= Time.deltaTime;
+
+                if (spawn_delay_time <= 0.0f)
+                {
+                    spawn_delay_time = spawn_delay_time_max;
+                    spawned = true;
+                    Debug.Log("213");
+                    spawn_real();
+                }
+            }
+       
+
+            if(wall_collide_collider_disabled && wall_collide_colluder_disable_timer > 0.0f)
+            {
+                wall_collide_colluder_disable_timer -= Time.deltaTime;
+
+                if(wall_collide_colluder_disable_timer <= 0.0f)
+                {
+                    wall_collide_colluder_disable_timer = wall_collide_collider_disable_timer_max;
+                    wall_collide_collider_disabled = false;
+                }
+            }
+
+
         }
 
 

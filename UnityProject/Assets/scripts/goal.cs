@@ -30,6 +30,15 @@ public class goal : MonoBehaviour {
     public bool is_goal_left;
 	int points = 1;
 
+
+
+    public GameObject player_1_obj;
+    public GameObject player_2_obj;
+    public GameObject player_3_obj;
+    public GameObject player_4_obj;
+
+    public GameObject firework_animator_obj;
+
 	void OnCollisionEnter(Collision other) {
 
 		if(other.gameObject.tag.Contains("ball")) {
@@ -64,23 +73,24 @@ public class goal : MonoBehaviour {
 				points = 2;
 			}
 
-          
 
 
+           
 
+            if (other.collider.gameObject.GetComponent<ball>().last_contact == vars.player_id.player_1) { game_manager.score_player_1 += points; asource.Play(); hut_animator.SetTrigger("goal"); pumking_animator.SetTrigger("goal"); player_1_obj.GetComponent<adv_playercontroller>().goaled(); firework_animator_obj.GetComponent<firework_animator>().play_blue(); 
+        }
+            else if (other.collider.gameObject.GetComponent<ball>().last_contact == vars.player_id.player_2) { game_manager.score_player_2 += points; asource.Play(); hut_animator.SetTrigger("goal"); pumking_animator.SetTrigger("goal"); player_2_obj.GetComponent<adv_playercontroller>().goaled(); firework_animator_obj.GetComponent<firework_animator>().play_green(); }
+            else if (other.collider.gameObject.GetComponent<ball>().last_contact == vars.player_id.player_3) { game_manager.score_player_3 += points; asource.Play(); hut_animator.SetTrigger("goal"); pumking_animator.SetTrigger("goal"); player_3_obj.GetComponent<adv_playercontroller>().goaled(); firework_animator_obj.GetComponent<firework_animator>().play_red(); }
+            else if (other.collider.gameObject.GetComponent<ball>().last_contact == vars.player_id.player_4) { game_manager.score_player_4 += points; asource.Play(); hut_animator.SetTrigger("goal"); pumking_animator.SetTrigger("goal"); player_4_obj.GetComponent<adv_playercontroller>().goaled(); firework_animator_obj.GetComponent<firework_animator>().play_yellow(); }
+            else { other.collider.gameObject.GetComponent<ball>().last_contact = vars.player_id.none; }
 
-            explosion_holder.transform.position = other.contacts[0].point;
-            ps.Play();
+                other.collider.gameObject.GetComponent<ball>().spawn(); //spawn ball
 
-            in_pp = false;
+                explosion_holder.transform.position = other.contacts[0].point;
+                ps.Play();
 
-            if (other.collider.gameObject.GetComponent<ball>().last_contact == vars.player_id.player_1) { game_manager.score_player_1 += points; asource.Play(); hut_animator.SetTrigger("goal"); pumking_animator.SetTrigger("goal"); }
-      else if (other.collider.gameObject.GetComponent<ball>().last_contact == vars.player_id.player_2) { game_manager.score_player_2 += points; asource.Play(); hut_animator.SetTrigger("goal"); pumking_animator.SetTrigger("goal"); }
-      else if (other.collider.gameObject.GetComponent<ball>().last_contact == vars.player_id.player_3) { game_manager.score_player_3 += points; asource.Play(); hut_animator.SetTrigger("goal"); pumking_animator.SetTrigger("goal"); }
-      else if (other.collider.gameObject.GetComponent<ball>().last_contact == vars.player_id.player_4) { game_manager.score_player_4 += points; asource.Play(); hut_animator.SetTrigger("goal"); pumking_animator.SetTrigger("goal"); }
-			else{other.collider.gameObject.GetComponent<ball>().last_contact = vars.player_id.none;}
-			other.collider.gameObject.GetComponent<ball>().spawn(); //spawn ball
-		}
+                in_pp = false;
+            }
 
 	}
 
@@ -125,56 +135,61 @@ public class goal : MonoBehaviour {
 		ps = explosion_holder.GetComponent<ParticleSystem>();
 		asource = this.GetComponent<AudioSource>();
 	}
-	
-	// Update is called once per frame
-	void Update () {
 
-
-        if(color_timer > 0.0f && game_manager.gstate == vars.game_state.playing)
+    // Update is called once per frame
+    void Update()
+    {
+        if (game_manager.gstate == vars.game_state.playing)
         {
-            color_timer -= Time.deltaTime;
-        }
-        else
-        {
-            color_timer = color_timer_max;
 
-            
-
-         
-
-
-            switch (goal_color)
+            if (color_timer > 0.0f)
             {
-                case colors.neutral:
-                    goal_color = colors.p1c;
-                    break;
-                case colors.p1c:
-                    goal_color = colors.p2c;
-                    break;
-                case colors.p2c:
-                    goal_color = colors.p3c;
-                    break;
-                case colors.p3c:
-                    goal_color = colors.p4c;
-                    break;
-                case colors.p4c:
-                    goal_color = colors.neutral;
-                    break;
-                default:
-                    break;
+                color_timer -= Time.deltaTime;
             }
-            update_color();
+            else
+            {
+                color_timer = color_timer_max;
 
+
+
+
+
+
+                switch (goal_color)
+                {
+                    case colors.neutral:
+                        goal_color = colors.p1c;
+                        break;
+                    case colors.p1c:
+                        goal_color = colors.p2c;
+                        break;
+                    case colors.p2c:
+                        goal_color = colors.p3c;
+                        break;
+                    case colors.p3c:
+                        goal_color = colors.p4c;
+                        break;
+                    case colors.p4c:
+                        goal_color = colors.neutral;
+                        break;
+                    default:
+                        break;
+                }
+                update_color();
+
+            }
+
+
+
+
+            if (!in_pp)
+            {
+                if (!ps.isPlaying)
+                {
+                    explosion_holder.transform.position = pp;
+                    in_pp = true;
+                }
+            }
         }
-
-
-
-
-		if(!in_pp){
-			if(!ps.isPlaying){
-			explosion_holder.transform.position = pp;
-			in_pp = true;
-			}
-		}
-	}
+    }
 }

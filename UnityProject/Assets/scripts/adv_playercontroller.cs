@@ -17,15 +17,22 @@ public class adv_playercontroller : MonoBehaviour {
   private Vector3 spawn_pos;
   public vars.player_statistics player_stat;
 
-
+    public GameObject dust_particle_obj;
+    ParticleSystem dust_particle;
     //NEW
     //MOVE GROUND
     public Vector3 player_move_speed_ground;
     public Vector3 player_move_speed_ground_max;
+    //MOVE GROUND CARRY
+    public Vector3 player_move_speed_ground_carry;
+    public Vector3 player_move_speed_ground_max_carry;
     public float animation_running_miltiploer = 0.25f;
     //MOVE AIR
     public Vector3 player_move_speed_air;
     public Vector3 player_move_speed_air_max;
+    //MOVE AIR CARRY
+    public Vector3 player_move_speed_air_carry;
+    public Vector3 player_move_speed_air_max_carry;
     //JUMP 1st
     public Vector3 first_jump_force;
     public bool is_reachead_first_jump;
@@ -41,9 +48,10 @@ public class adv_playercontroller : MonoBehaviour {
 
     //wall collide tierm
     public float wall_control_disable_max = 1.0f;
-    public float wall_control_disable =  1.0f;
+    private float wall_control_disable =  1.0f;
     public bool wall_control_disabled;
     public float punsh_speed = 2.0f;
+
   public GameObject ball_contact_collider_pbj;
   public float decarry_fly_speed = 2.0f;
 
@@ -61,12 +69,17 @@ public class adv_playercontroller : MonoBehaviour {
   private int curr_punsh_counter = 0;
 
   public float knock_back_time = 3.0f;
-  public float knoc_back_time_curr;
+  private float knoc_back_time_curr;
   public bool is_kocked;
   public float punsh_knockback_intense = 3.0f;
 
     public float punsh_disable_timer_max = 0.2f;
     float punsh_disable_timer = 0.2f;
+
+
+    private float goal_control_disable_timer = 2.0f;
+    public float goal_control_disable_timer_max = 2.0f;
+    public bool goal_control_disabled = false;
 
 
     bool punshed_state = false;
@@ -87,7 +100,7 @@ public class adv_playercontroller : MonoBehaviour {
 
 
 
-
+            rd.velocity = new Vector3(0.0f, rd.velocity.y, 0.0f);
             if (source_pos.x > physics_container.transform.position.x)
             {
                 rd.AddForce(new Vector3(-punsh_knockback_intense, 0.0f, 0.0f));
@@ -100,7 +113,12 @@ public class adv_playercontroller : MonoBehaviour {
     }
   }
 
+    public void goaled()
+    {
+        goal_control_disable_timer = goal_control_disable_timer_max;
+        goal_control_disabled = true;
 
+    }
 
     public void collide_with_left_wall()
     {
@@ -109,6 +127,10 @@ public class adv_playercontroller : MonoBehaviour {
         rd.AddForce(player_collide_vel_left);
         wall_control_disabled = true;
         wall_control_disable = wall_control_disable_max;
+        if(ball_instance.carried_by != player_id)
+        {
+            return;
+        }
         ball_instance.decarry_collide(ball_collide_vel_left);
 
     }
@@ -120,11 +142,28 @@ public class adv_playercontroller : MonoBehaviour {
         rd.AddForce(player_collide_vel_right);
         wall_control_disabled = true;
         wall_control_disable = wall_control_disable_max;
+        if (ball_instance.carried_by != player_id)
+        {
+            return;
+        }
         ball_instance.decarry_collide(ball_collide_vel_right);
 
     }
 
 
+
+
+    public void enabel_dance()
+    {
+        animator.SetBool("dance_1", true);
+        rotate_front();
+    }
+
+
+    public void rotate_front()
+    {
+        this.transform.rotation = Quaternion.Euler(0, 180, 0);
+    }
 
 
     public void reset_punsh_state()
@@ -141,8 +180,8 @@ public class adv_playercontroller : MonoBehaviour {
 
   public void spawn()
   {
-    
-    ball_contact_collider.enabled = true;
+        animator.SetBool("dance_1", false);
+        ball_contact_collider.enabled = true;
     punsh_collider.enabled = false;
     physics_container.transform.position = spawn_pos;
     rd.useGravity = true;
@@ -160,8 +199,11 @@ public class adv_playercontroller : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-    this.transform.rotation = Quaternion.Euler(0, 90, 0);
+  //  this.transform.rotation = Quaternion.Euler(0, 90, 0);
     ball_contact_collider = ball_contact_collider_pbj.GetComponent<BoxCollider>();
+        dust_particle = dust_particle_obj.GetComponent<ParticleSystem>();
+
+        dust_particle.Stop();
     spawn_pos = physics_container.transform.position;
     this.name = player_id.ToString();
     rd = physics_container.GetComponent<Rigidbody>();
@@ -193,7 +235,10 @@ public class adv_playercontroller : MonoBehaviour {
     }
 
     animator.SetFloat("punsh_speed", punsh_speed);
-	}
+        animator.SetBool("dance_1", false);
+     //   set_pause_pos();
+        rotate_front();
+    }
 
     // Update is called once per frame
     void Update()
@@ -235,44 +280,83 @@ public class adv_playercontroller : MonoBehaviour {
             }
         }
 
+        if (goal_control_disabled)
+        {
+            goal_control_disable_timer -= Time.deltaTime;
 
+            if(goal_control_disable_timer <= 0.0f)
+            {
+                goal_control_disabled = false;
+                goal_control_disable_timer = goal_control_disable_timer_max;
+            }
+
+        }
 
 
         //MOVE
-        if ((inputDevice.LeftStick.X < -0.1f || inputDevice.DPad.Left) && !is_kocked && !wall_control_disabled)
+        if ((inputDevice.LeftStick.X < -0.1f || inputDevice.DPad.Left) && !is_kocked && !wall_control_disabled && !goal_control_disabled)
         {
             right_oriented = false;
             this.transform.rotation = Quaternion.Euler(0, 90, 0);
+            if(rd.velocity.x < 0.0f) { rd.velocity = new Vector3(0.0f, rd.velocity.y, rd.velocity.z); }
+            if(ball_instance.carried_by == player_id)
+            {
+                if (rd.velocity.x < player_move_speed_ground_max_carry.x && this.transform.position.y <= 0.1f)
+                {
+                    rd.AddForce(player_move_speed_ground_carry);
+                }
+                else if (rd.velocity.x < player_move_speed_air_max_carry.x && this.transform.position.y > 0.1f)
+                {
+                    rd.AddForce(player_move_speed_air_carry);
+                }
+            }
+            else
+            {
+                if (rd.velocity.x < player_move_speed_ground_max.x && this.transform.position.y <= 0.1f)
+                {
+                    rd.AddForce(player_move_speed_ground);
+                }
+                else if (rd.velocity.x < player_move_speed_air_max.x && this.transform.position.y > 0.1f)
+                {
+                    rd.AddForce(player_move_speed_air);
+                }
+            }
 
 
-            if (rd.velocity.x < player_move_speed_ground_max.x && this.transform.position.y <= 0.1f)
-            {
-                rd.AddForce(player_move_speed_ground);
-            }
-            else if (rd.velocity.x < player_move_speed_air_max.x && this.transform.position.y > 0.1f)
-            {
-                rd.AddForce(player_move_speed_air);
-            }
 
 
 
 
 
         }
-        else if ((inputDevice.LeftStick.X > 0.1f || inputDevice.DPad.Right) && !is_kocked && !wall_control_disabled)
+        else if ((inputDevice.LeftStick.X > 0.1f || inputDevice.DPad.Right) && !is_kocked && !wall_control_disabled && !goal_control_disabled)
         {
             right_oriented = true;
             this.transform.rotation = Quaternion.Euler(0, 270, 0);
-
-
-            if (rd.velocity.x > -player_move_speed_ground_max.x && this.transform.position.y <= 0.1f)
+            if (rd.velocity.x > 0.0f) { rd.velocity = new Vector3(0.0f, rd.velocity.y, rd.velocity.z); }
+            if (ball_instance.carried_by == player_id)
             {
-                rd.AddForce(-player_move_speed_ground);
+                if (rd.velocity.x > -player_move_speed_ground_max_carry.x && this.transform.position.y <= 0.1f)
+                {
+                    rd.AddForce(-player_move_speed_ground_carry);
+                }
+                else if (rd.velocity.x > -player_move_speed_air_max_carry.x && this.transform.position.y > 0.1f)
+                {
+                    rd.AddForce(-player_move_speed_air_carry);
+                }
             }
-            else if (rd.velocity.x > -player_move_speed_air_max.x && this.transform.position.y > 0.1f)
+            else
             {
-                rd.AddForce(-player_move_speed_air);
+                if (rd.velocity.x > -player_move_speed_ground_max.x && this.transform.position.y <= 0.1f)
+                {
+                    rd.AddForce(-player_move_speed_ground);
+                }
+                else if (rd.velocity.x > -player_move_speed_air_max.x && this.transform.position.y > 0.1f)
+                {
+                    rd.AddForce(-player_move_speed_air);
+                }
             }
+              
 
         }
 
@@ -283,10 +367,12 @@ public class adv_playercontroller : MonoBehaviour {
             if (rd.velocity.x > 0.0f || rd.velocity.x < 0.0f)
             {
                 animator.SetBool("running", true);
+                dust_particle.Play();
             }
             else
             {
                 animator.SetBool("running", false);
+                dust_particle.Stop();
             }
             animator.SetFloat("speed", animation_running_miltiploer * rd.velocity.x);
             //player animation in der luft
@@ -294,11 +380,12 @@ public class adv_playercontroller : MonoBehaviour {
         else
         {
             animator.SetBool("running", false);
- //           animator.SetFloat("speed", 0.0f);
+            dust_particle.Stop();
+            //           animator.SetFloat("speed", 0.0f);
         }
     
         //PUNSH
-        if (btn_triggered(inputDevice, vars.player_controls.punsh) && !btn_triggered(inputDevice, vars.player_controls.punsh, true) && ball_instance.carried_by != player_id && !is_kocked && !wall_control_disabled)
+        if (btn_triggered(inputDevice, vars.player_controls.punsh) && !btn_triggered(inputDevice, vars.player_controls.punsh, true) && ball_instance.carried_by != player_id && !is_kocked && !wall_control_disabled && !goal_control_disabled)
         {
             animator.SetTrigger("punsh");
             punsh_collider.enabled = true;
@@ -322,7 +409,7 @@ public class adv_playercontroller : MonoBehaviour {
 
         
         //THROW
-        if (btn_triggered(inputDevice, vars.player_controls.carry_down) && !btn_triggered(inputDevice, vars.player_controls.carry_down, true) && !is_kocked)
+        if (btn_triggered(inputDevice, vars.player_controls.carry_down) && !btn_triggered(inputDevice, vars.player_controls.carry_down, true) && !is_kocked && !wall_control_disabled && !goal_control_disabled)
         {
           if (ball_instance.carried_by == player_id)
           {
@@ -360,7 +447,7 @@ public class adv_playercontroller : MonoBehaviour {
         //JUMP
  
 
-            if (btn_triggered(inputDevice, vars.player_controls.jump) && !btn_triggered(inputDevice, vars.player_controls.jump, true) && !is_kocked && !wall_control_disabled)
+            if (btn_triggered(inputDevice, vars.player_controls.jump) && !btn_triggered(inputDevice, vars.player_controls.jump, true) && !is_kocked && !wall_control_disabled && !goal_control_disabled)
             {
                 //je nach höhe entscheiden
                 if (!is_reachead_first_jump && !is_reachead_second_jump)

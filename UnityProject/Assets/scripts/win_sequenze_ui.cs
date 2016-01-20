@@ -48,11 +48,19 @@ public enum wstate
       player3_scrpit_obj.GetComponent<adv_playercontroller>().reset_velocity_and_gravity();
       player4_scrpit_obj.GetComponent<adv_playercontroller>().reset_velocity_and_gravity();
 
-			if(gm.winner_score_list.Count > 0){
+
+            player1_scrpit_obj.GetComponent<adv_playercontroller>().enabel_dance();
+            player2_scrpit_obj.GetComponent<adv_playercontroller>().enabel_dance();
+            player3_scrpit_obj.GetComponent<adv_playercontroller>().enabel_dance();
+            player4_scrpit_obj.GetComponent<adv_playercontroller>().enabel_dance();
+
+
+
+            if (gm.winner_score_list.Count > 0){
 			if(gm.winner_score_list[0].player == vars.player_id.player_1){
 
-
-        player1_scrpit_obj.GetComponent<adv_playercontroller>().physics_container.transform.position = GameObject.Find("1st_place").transform.position;
+    
+             player1_scrpit_obj.GetComponent<adv_playercontroller>().physics_container.transform.position = GameObject.Find("1st_place").transform.position;
 				
 			}
 			if(gm.winner_score_list[0].player == vars.player_id.player_2){
