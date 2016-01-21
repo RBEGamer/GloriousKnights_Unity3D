@@ -37,6 +37,8 @@ public class firework_animator : MonoBehaviour {
         is_playing_red = true;
         is_playing_yellow = true;
 
+        stop_all();
+
     }
 	
 	// Update is called once per frame
@@ -93,7 +95,31 @@ public class firework_animator : MonoBehaviour {
 
     }
 
+    public void play_all()
+    {
+        play_blue();
+        play_green();
+        play_red();
+        play_yellow();
+    }
 
+    public void stop_all()
+    {
+        firework_blue.GetComponent<ParticleSystem>().Stop();
+        firework_green.GetComponent<ParticleSystem>().Stop();
+        firework_red.GetComponent<ParticleSystem>().Stop();
+        firework_yellow.GetComponent<ParticleSystem>().Stop();
+
+        replay_time_blue = replay_time;
+        replay_time_green = replay_time;
+        replay_time_red = replay_time;
+        replay_time_yellow = replay_time;
+
+        is_playing_blue = true;
+        is_playing_green = true;
+        is_playing_red = true;
+        is_playing_yellow = true;
+    }
 
     public void play_blue()
     {

@@ -4,8 +4,11 @@ using System.Collections;
 public class phy_collider_trigger : MonoBehaviour {
   public GameObject adv_script_holder;
   private adv_playercontroller adv;
+    private Rigidbody rd;
 	// Use this for initialization
 	void Start () {
+        rd = this.GetComponent<Rigidbody>();
+
     adv = this.adv_script_holder.GetComponent<adv_playercontroller>();
 	}
 	

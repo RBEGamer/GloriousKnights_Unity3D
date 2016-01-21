@@ -61,7 +61,7 @@ public class ball : MonoBehaviour {
 		p2pc = player2_scrpit_obj.GetComponent<adv_playercontroller>();
 		p3pc = player3_scrpit_obj.GetComponent<adv_playercontroller>();
     p4pc = player4_scrpit_obj.GetComponent<adv_playercontroller>();
-
+        rotate_font();
     set_to_pause_pos();
 	}
 
@@ -85,7 +85,20 @@ public class ball : MonoBehaviour {
 	}
 
 
+    public void rotate_font()
+    {
+        this.transform.rotation = Quaternion.Euler(0, 0, 0);
+    }
 
+    public void roate_left()
+    {
+        this.transform.rotation = Quaternion.Euler(0, 90, 0);
+    }
+
+    public void roate_right()
+    {
+        this.transform.rotation = Quaternion.Euler(0, 270, 0);
+    }
 
 	public void decarry(){
        // this.transform.position = new Vector3(this.transform.position.x, this.transform.position.y + 1.0f, this.transform.position.z);
@@ -172,7 +185,7 @@ public class ball : MonoBehaviour {
 
 
         Debug.Log("spawn-real");
-       
+        rotate_font();
         last_contact = vars.player_id.none;
         carried_by = vars.player_id.none;
         rd.useGravity = true;
@@ -243,16 +256,18 @@ public class ball : MonoBehaviour {
   {
     asource.volume = 1.0f / game_manager.volume;
     asource.Play();
-   // shader_holder.GetComponent<Material>().SetFloat("EmitConst_1", 3.0f);
-    animator.SetTrigger("hit");
-   // shader_holder.GetComponent<Material>().SetFloat("EmitConst_1", 0.0f);
-  
+        rotate_font();
+        // shader_holder.GetComponent<Material>().SetFloat("EmitConst_1", 3.0f);
+        animator.SetTrigger("hit");
+        // shader_holder.GetComponent<Material>().SetFloat("EmitConst_1", 0.0f);
+
+
   }
 
 	void OnTriggerEnter(Collider other) {
     Debug.Log("ball trigger enter by" + other.transform.parent.gameObject.tag);
 
-    if (other.transform.parent.gameObject.tag == "Player" && !wall_collide_collider_disabled)
+    if (other.transform.parent.gameObject.tag == "Player" && !wall_collide_collider_disabled && game_manager.gstate == vars.game_state.playing)
     {
             //NUR WENN NICHT GECARRIED WIRD DANN WECHSELN
             if (!is_carrying())
@@ -296,12 +311,12 @@ public class ball : MonoBehaviour {
                 ms_skull_mat.SetColor("_EmitColor", Color.green);
                 break;
             case vars.player_id.player_3:
-                particles.startColor = Color.yellow;
-                ms_skull_mat.SetColor("_EmitColor", Color.yellow);
-                break;
-            case vars.player_id.player_4:
                 particles.startColor = Color.red;
                 ms_skull_mat.SetColor("_EmitColor", Color.red);
+                break;
+            case vars.player_id.player_4:
+                particles.startColor = Color.yellow;
+                ms_skull_mat.SetColor("_EmitColor", Color.yellow);
                 break;
             default:
                 break;
@@ -316,7 +331,8 @@ public class ball : MonoBehaviour {
 	void FixedUpdate () {
     if (this.transform.position.y < 0.0f)
     {
-     spawn_real();
+         
+            spawn_real();
         }
         update_particle_color();
     if (game_manager.gstate == vars.game_state.playing)

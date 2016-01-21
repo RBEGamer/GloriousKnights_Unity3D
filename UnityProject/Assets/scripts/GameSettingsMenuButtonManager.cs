@@ -17,7 +17,7 @@ public class GameSettingsMenuButtonManager : MonoBehaviour {
   private InputDevice inputDevice;
 
   int min_time = 30;
-  
+    public int set_game_time = 120;
   console_button start_btn;
   console_button exit_btn;
   console_button up_btn;
@@ -38,7 +38,7 @@ public class GameSettingsMenuButtonManager : MonoBehaviour {
     up_btn = up_game_button.GetComponent<console_button>();
     down_btn = down_game_button.GetComponent<console_button>();
     set_btn_state();
-    game_manager.game_time = 60;
+    game_manager.game_time = set_game_time;
     time_text_holder.GetComponent<Text>().text = game_manager.game_time.ToString() + " SECONDS";
   }
 

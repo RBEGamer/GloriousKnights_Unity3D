@@ -14,7 +14,7 @@ public class adv_playercontroller : MonoBehaviour {
 
   private BoxCollider punsh_collider;
   public GameObject punsh_collider_holder;
-  private Vector3 spawn_pos;
+  public Transform spawn_pos;
   public vars.player_statistics player_stat;
 
     public GameObject dust_particle_obj;
@@ -104,10 +104,12 @@ public class adv_playercontroller : MonoBehaviour {
             if (source_pos.x > physics_container.transform.position.x)
             {
                 rd.AddForce(new Vector3(-punsh_knockback_intense, 0.0f, 0.0f));
+                rotate_left();
             }
             else
             {
                 rd.AddForce(new Vector3(punsh_knockback_intense, 0.0f, 0.0f));
+                rotate_right();
             }
    
     }
@@ -162,9 +164,21 @@ public class adv_playercontroller : MonoBehaviour {
 
     public void rotate_front()
     {
-        this.transform.rotation = Quaternion.Euler(0, 180, 0);
+        this.transform.rotation = Quaternion.Euler(0, 0, 0);
     }
 
+
+    public void rotate_left()
+    {
+        this.transform.rotation = Quaternion.Euler(0, 90, 0);
+    }
+
+
+
+    public void rotate_right()
+    {
+        this.transform.rotation = Quaternion.Euler(0, 270, 0);
+    }
 
     public void reset_punsh_state()
     {
@@ -183,10 +197,10 @@ public class adv_playercontroller : MonoBehaviour {
         animator.SetBool("dance_1", false);
         ball_contact_collider.enabled = true;
     punsh_collider.enabled = false;
-    physics_container.transform.position = spawn_pos;
+    physics_container.transform.position = spawn_pos.transform.position;
     rd.useGravity = true;
     rd.velocity = Vector3.zero;
-    physics_container.transform.position = new Vector3(physics_container.transform.position.x,physics_container.transform.position.y, 0.0f);
+  //  physics_container.transform.position = new Vector3(physics_container.transform.position.x,physics_container.transform.position.y, 0.0f);
         
   }
 
@@ -204,7 +218,7 @@ public class adv_playercontroller : MonoBehaviour {
         dust_particle = dust_particle_obj.GetComponent<ParticleSystem>();
 
         dust_particle.Stop();
-    spawn_pos = physics_container.transform.position;
+  //  spawn_pos = physics_container.transform.position;
     this.name = player_id.ToString();
     rd = physics_container.GetComponent<Rigidbody>();
     my_collider = physics_container.GetComponent<BoxCollider>();
@@ -231,10 +245,10 @@ public class adv_playercontroller : MonoBehaviour {
     }
     else
     {
-      set_pause_pos();
+    
     }
-
-    animator.SetFloat("punsh_speed", punsh_speed);
+        set_pause_pos();
+        animator.SetFloat("punsh_speed", punsh_speed);
         animator.SetBool("dance_1", false);
      //   set_pause_pos();
         rotate_front();
@@ -255,7 +269,11 @@ public class adv_playercontroller : MonoBehaviour {
         }
 
 
-        if (game_manager.gstate != vars.game_state.playing || game_manager.gstate == vars.game_state.spawn) { return; }
+        if (game_manager.gstate == vars.game_state.playing || game_manager.gstate == vars.game_state.spawn) {
+          
+        }else{
+            return;
+        }
 
         if (is_kocked)
         {
@@ -298,7 +316,8 @@ public class adv_playercontroller : MonoBehaviour {
         {
             right_oriented = false;
             this.transform.rotation = Quaternion.Euler(0, 90, 0);
-            if(rd.velocity.x < 0.0f) { rd.velocity = new Vector3(0.0f, rd.velocity.y, rd.velocity.z); }
+            if (ball_instance.carried_by == player_id) { ball_instance.roate_left(); }
+            if (rd.velocity.x < 0.0f) { rd.velocity = new Vector3(0.0f, rd.velocity.y, rd.velocity.z); }
             if(ball_instance.carried_by == player_id)
             {
                 if (rd.velocity.x < player_move_speed_ground_max_carry.x && this.transform.position.y <= 0.1f)
@@ -324,7 +343,7 @@ public class adv_playercontroller : MonoBehaviour {
 
 
 
-
+           
 
 
 
@@ -333,6 +352,9 @@ public class adv_playercontroller : MonoBehaviour {
         {
             right_oriented = true;
             this.transform.rotation = Quaternion.Euler(0, 270, 0);
+
+
+            if(ball_instance.carried_by == player_id) { ball_instance.roate_right(); }
             if (rd.velocity.x > 0.0f) { rd.velocity = new Vector3(0.0f, rd.velocity.y, rd.velocity.z); }
             if (ball_instance.carried_by == player_id)
             {
@@ -493,10 +515,18 @@ public class adv_playercontroller : MonoBehaviour {
   {
     rd.useGravity = false;
     rd.velocity = Vector3.zero;
+        reset_jump_triggers();
+        reset_punsh_state();
     physics_container.transform.position = pause_pos.transform.position;
+    dust_particle.Stop();
+        animator.SetBool("running", false);
+        animator.SetBool("falling", false);
+        animator.SetBool("dance_1", false);
+        //animator.SetTrigger("idle");
+        rotate_front();
   }
 
-
+    
 
 
 

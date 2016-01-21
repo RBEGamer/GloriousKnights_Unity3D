@@ -175,6 +175,8 @@
     <Compile Include="Assets\InControl\Source\XInput\XInputDotNetPure\GamePad.cs" />
     <Compile Include="Assets\InControl\Source\XInput\XInputDotNetPure\Utils.cs" />
     <Compile Include="Assets\InControl\Test\TestInputManager.cs" />
+    <Compile Include="Assets\look_at_ball.cs" />
+    <Compile Include="Assets\obj_enabler.cs" />
     <Compile Include="Assets\scripts\CreditMenuButtonManager.cs" />
     <Compile Include="Assets\scripts\GameSettingsMenuButtonManager.cs" />
     <Compile Include="Assets\scripts\GameStartingMenuButtonManager.cs" />

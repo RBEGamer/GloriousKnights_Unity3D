@@ -10,6 +10,7 @@ public class goal : MonoBehaviour {
 
     }
 
+    int color_counter;
 
     public colors goal_color;
     public float color_timer;
@@ -121,13 +122,13 @@ public class goal : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        goal_color = colors.p4c;
+        goal_color = colors.neutral;
         update_color();
 
 
 
+        color_counter = 5;
 
-       
     hut_animator = hut_anim_holder.GetComponent<Animator>();
     pumking_animator = pumkin_anim_holder.GetComponent<Animator>();
 
@@ -150,31 +151,37 @@ public class goal : MonoBehaviour {
             {
                 color_timer = color_timer_max;
 
-
-
-
-
-
-                switch (goal_color)
+                if (color_counter >= 5)
                 {
-                    case colors.neutral:
-                        goal_color = colors.p1c;
-                        break;
-                    case colors.p1c:
-                        goal_color = colors.p2c;
-                        break;
-                    case colors.p2c:
-                        goal_color = colors.p3c;
-                        break;
-                    case colors.p3c:
-                        goal_color = colors.p4c;
-                        break;
-                    case colors.p4c:
-                        goal_color = colors.neutral;
-                        break;
+                    color_counter = 0;
+                }
+                else{
+                    color_counter++;
+                }
+              
+
+
+                switch (color_counter)
+                {
+                    case 0: goal_color = colors.neutral; break;
+                    case 1: goal_color = colors.p1c; break;
+                    case 2: goal_color = colors.p2c; break;
+                    case 3: goal_color = colors.neutral; break;
+                    case 4: goal_color = colors.p3c; break;
+                    case 5: goal_color = colors.p4c; break;
                     default:
                         break;
                 }
+
+
+
+
+               
+
+
+
+
+
                 update_color();
 
             }

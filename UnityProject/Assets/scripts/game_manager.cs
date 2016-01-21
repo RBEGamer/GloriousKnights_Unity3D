@@ -29,13 +29,21 @@ public class game_manager : MonoBehaviour {
 	public List<vars.win_player> winner_score_list = new List<vars.win_player>();
 	// Use this for initialization
 	void Start () {
-		asource = this.GetComponent<AudioSource>();
+        Cursor.visible = false;
+        asource = this.GetComponent<AudioSource>();
 		spaw_time += 1; //damit immer erst die spieler un dann der ball gespawned wird
 		this.name = "game_manager";
     game_manager.gstate = vars.game_state.game_starting;
-	}
+
+        player1_scrpit_obj.GetComponent<adv_playercontroller>().set_pause_pos();
+        player2_scrpit_obj.GetComponent<adv_playercontroller>().set_pause_pos();
+        player3_scrpit_obj.GetComponent<adv_playercontroller>().set_pause_pos();
+        player4_scrpit_obj.GetComponent<adv_playercontroller>().set_pause_pos();
+        GameObject.Find("ball").GetComponent<ball>().set_to_pause_pos();
+    }
 	public void generate_win_table(){
-		//create score list
+        //create score list
+        winner_score_list.Clear();
 		vars.win_player tmp = new vars.win_player();
     if (player1_scrpit_obj.GetComponent<adv_playercontroller>().is_playing)
     {
@@ -69,6 +77,7 @@ public class game_manager : MonoBehaviour {
 				}
 			}
 		}
+        winner_score_list.Reverse();
 		game_manager.gstate = vars.game_state.win_sequenze;
 		GameObject.Find("UI_MAIN_HOLDER").GetComponent<ingame_gui_manager>().refresh_count_ui();
 	}
@@ -98,24 +107,24 @@ public class game_manager : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if(gstate == vars.game_state.spawn){
-			if(game_manager.curr_spawn_time <= 2.0f && !player_spawned){
+			if( !player_spawned){
 				//spawn player
         if (player1_scrpit_obj.GetComponent<adv_playercontroller>().is_playing)
         {
           player1_scrpit_obj.GetComponent<adv_playercontroller>().spawn();
 				}
 
-        if (player1_scrpit_obj.GetComponent<adv_playercontroller>().is_playing)
+        if (player2_scrpit_obj.GetComponent<adv_playercontroller>().is_playing)
         {
-          player1_scrpit_obj.GetComponent<adv_playercontroller>().spawn();
+          player2_scrpit_obj.GetComponent<adv_playercontroller>().spawn();
 				}
-        if (player1_scrpit_obj.GetComponent<adv_playercontroller>().is_playing)
+        if (player3_scrpit_obj.GetComponent<adv_playercontroller>().is_playing)
         {
-            player1_scrpit_obj.GetComponent<adv_playercontroller>().spawn();
+            player3_scrpit_obj.GetComponent<adv_playercontroller>().spawn();
 					}
-        if (player1_scrpit_obj.GetComponent<adv_playercontroller>().is_playing)
+        if (player4_scrpit_obj.GetComponent<adv_playercontroller>().is_playing)
         {
-              player1_scrpit_obj.GetComponent<adv_playercontroller>().spawn();
+              player4_scrpit_obj.GetComponent<adv_playercontroller>().spawn();
 						}
 
 				player_spawned = true;
